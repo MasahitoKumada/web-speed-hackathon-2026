@@ -54,16 +54,19 @@ const config = {
       },
       {
         resourceQuery: /binary/,
-        type: "asset/bytes",
+        type: "asset/resource",
+        generator: {
+          filename: "assets/[name][ext]",
+        },
       },
     ],
   },
   output: {
     chunkFilename: "scripts/chunk-[contenthash].js",
-    chunkFormat: false,
+    chunkFormat: "array-push",
     filename: "scripts/[name].js",
     path: DIST_PATH,
-    publicPath: "auto",
+    publicPath: "/",
     clean: true,
   },
   plugins: [
@@ -91,7 +94,8 @@ const config = {
       ],
     }),
     new HtmlWebpackPlugin({
-      inject: false,
+      inject: "head",
+      scriptLoading: "blocking",
       template: path.resolve(SRC_PATH, "./index.html"),
     }),
   ],
@@ -129,7 +133,9 @@ const config = {
   },
   optimization: {
     minimize: true,
-    splitChunks: false,
+    splitChunks: {
+      chunks: "all",
+    },
     concatenateModules: true,
     usedExports: true,
     providedExports: true,
